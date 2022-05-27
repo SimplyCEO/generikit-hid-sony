@@ -513,8 +513,9 @@ struct motion_output_report_02 {
 #define SIXAXIS_REPORT_0xF5_SIZE 8
 #define MOTION_REPORT_0x02_SIZE 49
 
-int8_t sixaxis_report_0xf2_size = SIXAXIS_REPORT_0xF2_SIZE;
-int8_t sixaxis_report_0xf5_size = SIXAXIS_REPORT_0xF5_SIZE;
+// The dirty patch started.
+u8 sixaxis_report_0xf2_size = SIXAXIS_REPORT_0xF2_SIZE;
+u8 sixaxis_report_0xf5_size = SIXAXIS_REPORT_0xF5_SIZE;
 
 /* Offsets relative to USB input report (0x1). Bluetooth (0x11) requires an
  * additional +2.

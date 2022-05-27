@@ -12,6 +12,7 @@ In the middle of the repository jouney, most of the systems will have a automate
 But this day is most likely to happen very far from now. So, consider having the following:
 
 - git
+- wget
 - gcc
 - make
 - Linux Headers
@@ -30,7 +31,8 @@ make && sudo make install clean
 ## Inspiration
 
 One time this patch got revoked by the zen-kernel programmers.<br>
-Just like they said: "I'd really prefer we don't add code for fakes."
+Just like they said:
+> "I'd really prefer we don't add code for fakes."
 
 Even knowing it is generic, the device continue being a device.
 
