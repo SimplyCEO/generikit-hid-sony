@@ -22,7 +22,7 @@ The headers are important because it creates a `/lib/modules/KERNEL_VERSION/buil
 ## Building
 
 Building for now is very dirty. But, hey, "if it works, it works!":
-```bash
+```sh
 git clone --recursive https://github.com/KanuX-14/GeneriKit.git
 cd GeneriKit
 make && sudo make install clean
@@ -40,6 +40,11 @@ Even knowing it is generic, the device continue being a device.
 
 You are more than welcome to submit a driver that got revoked by the team.<br>
 If your driver bugs some architecture, consider putting a `warning.txt` file within the directory.
+
+All the contribution should be directly sent to the `devel` branch.
+```sh
+git checkout devel
+```
 
 ## References
 
