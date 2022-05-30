@@ -18,11 +18,11 @@ OLD_MODULES += $(KERNEL_PATH)/kernel/drivers/hid/hid-sony*
 all: modules
 
 modules:
-	sudo rmmod $(MODULES)
+	sudo rmmod $(MODULES) || true
 	mkdir -pv build
 	mkdir -pv backup
 	cp -v $(FILES) build
-	cp -v $(OLD_MODULES) backup
+	cp -v $(OLD_MODULES) backup || true
 	sudo rm -fv $(OLD_MODULES)
 	printf "obj-m = $(OBJECTS)\n" > build/Makefile
 	cd build && $(SHELL) dependencies $(EXTRA)
