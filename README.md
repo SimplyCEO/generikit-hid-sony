@@ -43,4 +43,5 @@ If your driver bugs some architecture, consider putting a `warning.txt` file wit
 
 ## References
 
-My first [closed pull request](https://github.com/zen-kernel/zen-kernel/pull/279).
+My first [closed pull request](https://github.com/zen-kernel/zen-kernel/pull/279).<br>
+PS3 generic controller [forum discussion](https://retropie.org.uk/forum/topic/28263/playstation-3-controller-not-connecting-wired-on-new-pi4-retropie-build/7)... huge thanks to doug and [b3n](https://github.com/btlogy)!
