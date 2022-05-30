@@ -2666,9 +2666,9 @@ static int sony_check_add(struct sony_sc *sc)
 			ret = 17;
 
 		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
-			char bufforhere[256];
-			snprintf(bufforhere, sizeof("Size is:          \n"), "Size is: %d\n", max(SIXAXIS_REPORT_0xF2_SIZE, SIXAXIS_REPORT_0xF5_SIZE));
-			hid_err(sc->hdev, bufforhere);
+			char hid_err_report[256];
+			snprintf(hid_err_report, sizeof("failed to retrieve feature report 0xf2 with size of     the Sixaxis MAC address\n"), "failed to retrieve feature report 0xf2 with size of %d the Sixaxis MAC address\n", ret);
+			hid_err(sc->hdev, hid_err_report);
 			// hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
 			ret = ret < 0 ? ret : -EINVAL;
 			goto out_free;
