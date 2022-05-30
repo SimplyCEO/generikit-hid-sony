@@ -8,16 +8,22 @@ EXTRA := #skip
 
 # Get the drivers location and give the module name
 
-FILES += dependencies dependencies.txt drivers/hid/hid-sony.c
+FILES += dependencies \
+		 dependencies.txt \
+		 drivers/hid/hid-sony.c
 OBJECTS += hid-sony.o
 MODULES += hid-sony
+OLD_MODULES += $(KERNEL_PATH)/kernel/drivers/hid/hid-sony*
 
 all: modules
 
 modules:
-	sudo modprobe -r $(MODULES)
+	sudo rmmod $(MODULES)
 	mkdir -pv build
+	mkdir -pv backup
 	cp -v $(FILES) build
+	cp -v $(OLD_MODULES) backup
+	sudo rm -fv $(OLD_MODULES)
 	printf "obj-m = $(OBJECTS)\n" > build/Makefile
 	cd build && $(SHELL) dependencies $(EXTRA)
 	cd build && make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules
