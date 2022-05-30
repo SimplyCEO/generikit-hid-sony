@@ -10,7 +10,8 @@ EXTRA := #skip
 
 FILES += dependencies \
 		 dependencies.txt \
-		 drivers/hid/hid-sony.c
+		 drivers/hid/hid-sony.c \
+		 drivers/hid/hid-ids.h
 OBJECTS += hid-sony.o
 MODULES += hid-sony
 OLD_MODULES += $(KERNEL_PATH)/kernel/drivers/hid/hid-sony*
