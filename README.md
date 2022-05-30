@@ -38,6 +38,8 @@ Even knowing it is generic, the device continue being a device.
 
 ## Contribution
 
+Welcome to the contribution page!
+
 You are more than welcome to submit a driver that got revoked by the team.<br>
 If your driver bugs some architecture, consider putting a `warning.txt` file within the directory.
 
