@@ -10,28 +10,29 @@ EXTRA := #skip
 
 FILES += dependencies \
 		 dependencies.txt \
-		 drivers/hid/hid-sony.c \
+		 drivers/hid/generic-hid-sony.c \
 		 drivers/hid/hid-ids.h
-OBJECTS += hid-sony.o
-MODULES += hid-sony
-OLD_MODULES += $(KERNEL_PATH)/kernel/drivers/hid/hid-sony*
+
+OBJECTS += generic-hid-sony.o
+
+NEW_MODULES += generic-hid-sony
+
+OLD_MODULES += hid-sony
 
 all: modules
 
 modules:
-	sudo rmmod $(MODULES) || true
+	sudo rmmod $(OLD_MODULES) || true
 	mkdir -pv build
-	mkdir -pv backup
 	cp -v $(FILES) build
-	cp -v $(OLD_MODULES) backup || true
-	sudo rm -fv $(OLD_MODULES)
 	printf "obj-m = $(OBJECTS)\n" > build/Makefile
 	cd build && $(SHELL) dependencies $(EXTRA)
 	cd build && make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules
 
 install:
 	cd build && make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules_install
-	sudo modprobe $(MODULES)
+	sudo modprobe $(NEW_MODULES)
+	printf "$(OLD_MODULES)\n" | tee /etc/modprobe.d/generikit.conf
 
 clean:
 	rm -rfv build
