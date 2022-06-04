@@ -9,7 +9,6 @@ CYAN="\e[1;36m"
 RESET_COLOUR="\e[0m"
 DEPENDENCIES="dependencies.txt"
 
-i=0;
 x=0;
 n=$(cat "$DEPENDENCIES" | wc -l)
 
