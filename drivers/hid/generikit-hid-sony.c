@@ -42,7 +42,7 @@
 #include <linux/timer.h>
 #include <asm/unaligned.h>
 
-#include "hid-ids.h"
+#include "generikit-hid-ids.h"
 
 #define VAIO_RDESC_CONSTANT       BIT(0)
 #define SIXAXIS_CONTROLLER_USB    BIT(1)
@@ -64,6 +64,7 @@
 #define GH_GUITAR_CONTROLLER      BIT(17)
 #define GHL_GUITAR_PS3WIIU        BIT(18)
 #define GHL_GUITAR_PS4            BIT(19)
+#define BATOH_DEVICE_CONTROLLER	  BIT(20)
 
 #define SIXAXIS_CONTROLLER (SIXAXIS_CONTROLLER_USB | SIXAXIS_CONTROLLER_BT)
 #define MOTION_CONTROLLER (MOTION_CONTROLLER_USB | MOTION_CONTROLLER_BT)
@@ -513,10 +514,6 @@ struct motion_output_report_02 {
 #define SIXAXIS_REPORT_0xF5_SIZE 8
 #define MOTION_REPORT_0x02_SIZE 49
 
-// The dirty patch started.
-u8 sixaxis_report_0xf2_size = SIXAXIS_REPORT_0xF2_SIZE;
-u8 sixaxis_report_0xf5_size = SIXAXIS_REPORT_0xF5_SIZE;
-
 /* Offsets relative to USB input report (0x1). Bluetooth (0x11) requires an
  * additional +2.
  */
@@ -945,7 +942,7 @@ static u8 *sony_report_fixup(struct hid_device *hdev, u8 *rdesc,
 {
 	struct sony_sc *sc = hid_get_drvdata(hdev);
 
-	if (sc->quirks & (SINO_LITE_CONTROLLER | FUTUREMAX_DANCE_MAT))
+	if (sc->quirks & (SINO_LITE_CONTROLLER | FUTUREMAX_DANCE_MAT ))
 		return rdesc;
 
 	/*
@@ -1638,16 +1635,23 @@ static int sixaxis_set_operational_usb(struct hid_device *hdev)
 {
 	struct sony_sc *sc = hid_get_drvdata(hdev);
 	const int buf_size =
-		max(sixaxis_report_0xf2_size, sixaxis_report_0xf5_size);
+		max(SIXAXIS_REPORT_0xF2_SIZE, SIXAXIS_REPORT_0xF5_SIZE);
 	u8 *buf;
 	int ret;
 
 	buf = kmalloc(buf_size, GFP_KERNEL);
 	if (!buf)
 		return -ENOMEM;
+	
+	if(sc->quirks & BATOH_DEVICE_CONTROLLER)
+	{
+		ret = 0;
+		goto out;
+	}
 
-	ret = hid_hw_raw_request(hdev, 0xf2, buf, sixaxis_report_0xf2_size,
-				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+	ret = hid_hw_raw_request(hdev, 0xf2, buf, SIXAXIS_REPORT_0xF2_SIZE,
+			  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+	
 	if (ret < 0) {
 		hid_err(hdev, "can't set operational mode: step 1\n");
 		goto out;
@@ -1657,8 +1661,10 @@ static int sixaxis_set_operational_usb(struct hid_device *hdev)
 	 * Some compatible controllers like the Speedlink Strike FX and
 	 * Gasia need another query plus an USB interrupt to get operational.
 	 */
-	ret = hid_hw_raw_request(hdev, 0xf5, buf, sixaxis_report_0xf5_size,
-				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+	
+	ret = hid_hw_raw_request(hdev, 0xf5, buf, SIXAXIS_REPORT_0xF5_SIZE,
+			  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+	
 	if (ret < 0) {
 		hid_err(hdev, "can't set operational mode: step 2\n");
 		goto out;
@@ -2642,7 +2648,7 @@ static int sony_check_add(struct sony_sc *sc)
 			 "%pMR", sc->mac_address);
 	} else if ((sc->quirks & SIXAXIS_CONTROLLER_USB) ||
 			(sc->quirks & NAVIGATION_CONTROLLER_USB)) {
-		buf = kmalloc(sixaxis_report_0xf2_size, GFP_KERNEL);
+		buf = kmalloc(SIXAXIS_REPORT_0xF2_SIZE, GFP_KERNEL);
 		if (!buf)
 			return -ENOMEM;
 
@@ -2652,11 +2658,17 @@ static int sony_check_add(struct sony_sc *sc)
 		 * offset 4.
 		 */
 		ret = hid_hw_raw_request(sc->hdev, 0xf2, buf,
-				sixaxis_report_0xf2_size, HID_FEATURE_REPORT,
+				SIXAXIS_REPORT_0xF2_SIZE, HID_FEATURE_REPORT,
 				HID_REQ_GET_REPORT);
 
-		if (ret != sixaxis_report_0xf2_size) {
-			hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
+		if(sc->quirks & BATOH_DEVICE_CONTROLLER)
+			ret = 17;
+
+		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
+			char hid_err_report[256];
+			snprintf(hid_err_report, sizeof("failed to retrieve feature report 0xf2 with size of     the Sixaxis MAC address\n"), "failed to retrieve feature report 0xf2 with size of %d the Sixaxis MAC address\n", ret);
+			hid_err(sc->hdev, hid_err_report);
+			// hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
 			ret = ret < 0 ? ret : -EINVAL;
 			goto out_free;
 		}
@@ -2992,12 +3004,9 @@ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	if (!strcmp(hdev->name, "SHANWAN PS3 GamePad") ||
 	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
 		quirks |= SHANWAN_GAMEPAD;
-
+	
 	if (!strcmp(hdev->name, "PS3 Controller"))
-	{
-		sixaxis_report_0xf2_size = 64;
-		sixaxis_report_0xf5_size = sixaxis_report_0xf2_size;
-	}
+		quirks |= BATOH_DEVICE_CONTROLLER;
 
 	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
 	if (sc == NULL) {
@@ -3220,6 +3229,9 @@ static const struct hid_device_id sony_devices[] = {
 	/* Guitar Hero Live PS4 guitar dongles */
 	{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE),
 		.driver_data = GHL_GUITAR_PS4 | GH_GUITAR_CONTROLLER },
+	/* Batoh Device Controller for PS3 */
+	{ HID_USB_DEVICE(USB_VENDOR_ID_BATOH, USB_DEVICE_ID_BATOH_GAMEPAD),
+		.driver_data = SIXAXIS_CONTROLLER_USB | BATOH_DEVICE_CONTROLLER },
 	{ }
 };
 MODULE_DEVICE_TABLE(hid, sony_devices);

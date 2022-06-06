@@ -9,7 +9,6 @@ CYAN="\e[1;36m"
 RESET_COLOUR="\e[0m"
 DEPENDENCIES="dependencies.txt"
 
-i=0;
 x=0;
 n=$(cat "$DEPENDENCIES" | wc -l)
 
@@ -30,13 +29,15 @@ if [ -d /lib/modules/$(uname -r)/build ]; then
 		fi
 	fi
 
-	for i in n; do
-		x=$((x+1))
-		URL=$(cat "$DEPENDENCIES" | sed -n "$x"p)
-		printf "$GREEN""[URL]:$URL""$RESET_COLOUR""\n"
-		wget -o- "$URL"
-		printf "$RESET_COLOUR""\n"
-	done
+	if [ $n -gt 0 ]; then
+		for i in n; do
+			x=$((x+1))
+			URL=$(cat "$DEPENDENCIES" | sed -n "$x"p)
+			printf "$GREEN""[URL]:$URL""$RESET_COLOUR""\n"
+			wget -o- "$URL"
+			printf "$RESET_COLOUR""\n"
+		done
+	fi
 else
 	printf "$RED""Error! Headers are not installed! Exiting...""$RESET_COLOUR""\n"
 fi
