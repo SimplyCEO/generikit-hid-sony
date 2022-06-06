@@ -34,6 +34,7 @@ modules:
 install:
 	@for x in $(shell cat $(BUILD_DIRECTORY)/old_modules | wc -l); do rmmod $(shell cat $(BUILD_DIRECTORY)/old_modules | sed -n $(x)p) || true; done
 	@for x in $(shell cat $(BUILD_DIRECTORY)/new_modules | wc -l); do rmmod $(shell cat $(BUILD_DIRECTORY)/new_modules | sed -n $(x)p) || true; done
+	@for x in $(shell cat $(BUILD_DIRECTORY)/old_modules | wc -l); do printf "blacklist $(shell cat $(BUILD_DIRECTORY)/old_modules | sed -n $(x)p)\n" | tee /etc/modprobe.d/generikit.conf || true; done
 	@cd $(BUILD_DIRECTORY) && make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules_install
 	@sleep 1
 	@for x in $(shell cat $(BUILD_DIRECTORY)/new_modules | wc -l); do modprobe -v $(shell cat $(BUILD_DIRECTORY)/new_modules | sed -n $(x)p) || true; done
