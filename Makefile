@@ -22,10 +22,10 @@ all:
 hid-sony:
 	@printf "\e[1;32mAdded hid-sony to the recipe.\e[0m\n"
 	@mkdir -pv $(BUILD_DIRECTORY)
-	@cp -v drivers/hid/generic-hid-sony.c drivers/hid/hid-ids.h $(BUILD_DIRECTORY)
-	@printf "obj-m = generic-hid-sony.o\n" > $(BUILD_DIRECTORY)/Makefile
+	@cp -v drivers/hid/generikit-hid-sony.c drivers/hid/hid-ids.h $(BUILD_DIRECTORY)
+	@printf "obj-m = generikit-hid-sony.o\n" > $(BUILD_DIRECTORY)/Makefile
 	@printf "hid-sony\n" >> $(BUILD_DIRECTORY)/old_modules
-	@printf "generic-hid-sony\n" >> $(BUILD_DIRECTORY)/new_modules
+	@printf "generikit-hid-sony\n" >> $(BUILD_DIRECTORY)/new_modules
 
 modules:
 	@mkdir -pv $(BUILD_DIRECTORY)
