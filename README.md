@@ -25,8 +25,9 @@ Building for now is very dirty. But, hey, "if it works, it works!":
 ```bash
 git clone --recursive https://github.com/KanuX-14/GeneriKit.git
 cd GeneriKit
-make && sudo make install clean
+make <modules> modules && sudo make install clean
 ```
+Note: Where `<modules>`, put the drivers you want to compile.
 
 ## Inspiration
 
