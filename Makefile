@@ -16,11 +16,11 @@ OLD_MODULES =
 NEW_MODULES =
 
 all:
-	@printf "Choose the module(s) to compile\n\
-	\thid-sony - Support for generic PlayStation 3 controller.\n"
+	@gcc -o generikit build.c
+	@./generikit --help
 
-hid-sony:
-	@printf "\e[1;32mAdded hid-sony to the recipe.\e[0m\n"
+generikit-hid-sony::
+	@printf "\e[1;32mAdded generikit-hid-sony: to the recipe.\e[0m\n"
 	@mkdir -pv $(BUILD_DIRECTORY)
 	@cp -v drivers/hid/generikit-hid-sony.c drivers/hid/generikit-hid-ids.h $(BUILD_DIRECTORY)
 	@printf "obj-m = generikit-hid-sony.o\n" > $(BUILD_DIRECTORY)/Makefile
@@ -41,3 +41,4 @@ install:
 
 clean:
 	@rm -rfv $(BUILD_DIRECTORY)
+	@rm -v generikit

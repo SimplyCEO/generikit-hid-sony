@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Terminal colours
 RED="\e[1;31m"
 GREEN="\e[1;32m"
 YELLOW="\e[1;33m"
@@ -7,10 +8,42 @@ BLUE="\e[1;34m"
 PURPLE="\e[1;35m"
 CYAN="\e[1;36m"
 RESET_COLOUR="\e[0m"
-DEPENDENCIES="dependencies.txt"
 
-x=0;
-n=$(cat "$DEPENDENCIES" | wc -l)
+# Variables
+DEPENDENCIES="dependencies.txt"
+LINES=$(cat "$DEPENDENCIES" | wc -l)
+ARGUMENTS="$@"
+ARGUMENTS_ROW=$#
+x=0
+
+# If identified any error
+function error()
+{
+	printf "$RED""ERROR: too few arguments in $0.""$RESET_COLOUR\n"
+	return 1
+}
+
+# Support for generic PS3 Controller
+function custom_hid_sony()
+{
+	echo TODO
+}
+
+# Enable monitor mode for TL-WN722N v2/3
+function custom_8188eu()
+{
+	echo TODO
+}
+
+# Use a phone / Google Cardboard VR as a SteamVR
+function custom_openvr()
+{
+	echo TODO
+}
+
+if [ $ARGUMENTS_ROW -eq 0 ]; then
+	error
+fi
 
 # Check if headers are installed
 if [ -d /lib/modules/$(uname -r)/build ]; then
@@ -29,8 +62,9 @@ if [ -d /lib/modules/$(uname -r)/build ]; then
 		fi
 	fi
 
-	if [ $n -gt 0 ]; then
-		for i in n; do
+	if [ $LINES -gt 0 ]; then
+		x=0
+		for i in $LINES; do
 			x=$((x+1))
 			URL=$(cat "$DEPENDENCIES" | sed -n "$x"p)
 			printf "$GREEN""[URL]:$URL""$RESET_COLOUR""\n"
@@ -39,5 +73,5 @@ if [ -d /lib/modules/$(uname -r)/build ]; then
 		done
 	fi
 else
-	printf "$RED""Error! Headers are not installed! Exiting...""$RESET_COLOUR""\n"
+	printf "$RED""ERROR: Headers are not installed.""$RESET_COLOUR""\n"
 fi
