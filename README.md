@@ -1,4 +1,7 @@
-# GeneriKit
+<p align="center">
+<img src="./.media/generikit_logo.png" alt="GeneriKit logo" width="50%"/>
+</p>
+
 Generic patches. Those that were revoked by the sages.
 
 ## Usage
@@ -11,17 +14,20 @@ But choosing which file to compile is a hard task. And that is what this reposit
 In the middle of the repository jouney, most of the systems will have a automated install.<br>
 But this day is most likely to happen very far from now. So, consider having the following:
 
-- git
-- wget
-- gcc
-- make
-- Linux Headers
+|   Package     |   URL                                             |
+|---------------|---------------------------------------------------|
+|   gcc         |   https://ftp.gnu.org/gnu/gcc/                    |
+|   git         |   https://github.com/git/git                      |
+|   make        |   https://ftp.gnu.org/gnu/make/                   |
+|   wget        |   https://ftp.gnu.org/gnu/wget/                   |
 
-The headers are important because it creates a `/lib/modules/KERNEL_VERSION/build` file, which is used to build the modules.
+It is necessary the usage of kernel headers. Each distribution have a different package.<br>
+They can also be manually compiled. See [this](https://www.kernel.org/doc/html/latest/kbuild/modules.html).
 
 ## Building
 
-Building for now is very dirty. But, hey, "if it works, it works!":
+Building for now is very dirty. But, hey, **if it works, it works!**:
+
 ```sh
 git clone --recursive https://github.com/KanuX-14/GeneriKit.git
 cd GeneriKit
@@ -47,7 +53,7 @@ All the contribution should be directly sent to the `devel` branch.
 git checkout devel
 ```
 
-## References
+### References
 
 My first [closed pull request](https://github.com/zen-kernel/zen-kernel/pull/279).<br>
 PS3 generic controller [forum discussion](https://retropie.org.uk/forum/topic/28263/playstation-3-controller-not-connecting-wired-on-new-pi4-retropie-build/7)... huge thanks to doug and [b3n](https://github.com/btlogy)!
