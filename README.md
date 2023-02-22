@@ -34,7 +34,7 @@ Building for now is very dirty. But, hey, **if it works, it works!**:
 ```sh
 git clone --recursive https://github.com/KanuX-14/GeneriKit.git
 cd GeneriKit
-make <driver> modules && sudo make install clean
+make <driver> modules && su -c "make install clean"
 ```
 Note: Where `<driver>`, put the drivers you want to compile.
 
