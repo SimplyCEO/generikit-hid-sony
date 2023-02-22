@@ -1,25 +1,16 @@
 # Get kernel path
 
-KERNEL_VERSION := $(shell uname -r)
-KERNEL_PATH := /lib/modules/$(KERNEL_VERSION)
-KERNEL_BUILD := $(KERNEL_PATH)/build
-BUILD_DIRECTORY := $(shell pwd)/build
-EXTRA := #skip
-
-# Set the drivers and modules variable
-#
-# DO NOT define any optional file in the variables
-
-DRIVERS =
-OBJECTS =
-OLD_MODULES =
-NEW_MODULES =
+KERNEL_VERSION=$(shell uname -r)
+KERNEL_PATH=/lib/modules/$(KERNEL_VERSION)
+KERNEL_BUILD=$(KERNEL_PATH)/build
+BUILD_DIRECTORY=$(shell pwd)/build
+EXTRA=#skip
 
 all:
-	@gcc -o generikit build.c
+	gcc -o generikit build.c
 	@./generikit --help
 
-generikit-hid-sony::
+generikit-hid-sony:
 	@printf "\e[1;32mAdded generikit-hid-sony: to the recipe.\e[0m\n"
 	@mkdir -pv $(BUILD_DIRECTORY)
 	@cp -v drivers/hid/generikit-hid-sony.c drivers/hid/generikit-hid-ids.h $(BUILD_DIRECTORY)
@@ -40,5 +31,5 @@ install:
 	@for x in $(shell cat $(BUILD_DIRECTORY)/new_modules | wc -l); do modprobe -v $(shell cat $(BUILD_DIRECTORY)/new_modules | sed -n $(x)p) || true; done
 
 clean:
-	@rm -rfv $(BUILD_DIRECTORY)
-	@rm -v generikit
+	@rm -rv $(BUILD_DIRECTORY) 2&>/dev/null || true
+	@rm -v generikit 2&>/dev/null || true
