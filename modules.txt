@@ -1,2 +1,0 @@
-generikit-hid-sony: Generic PS3 Controller support.
-generikit-rtl8188eus: Aircrack-NG fork for enabling the monitor mode of the TL-WN722N v2/v3 dongle.
