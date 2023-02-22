@@ -17,7 +17,7 @@ But this day is most likely to happen very far from now. So, consider having the
 |   Package     |   URL                                             |
 |---------------|---------------------------------------------------|
 |   gcc         |   https://ftp.gnu.org/gnu/gcc/                    |
-|   git         |   https://github.com/git/git                      |
+|   git         |   https://ftp.gnu.org/gnu/git/                    |
 |   make        |   https://ftp.gnu.org/gnu/make/                   |
 |   wget        |   https://ftp.gnu.org/gnu/wget/                   |
 
@@ -34,6 +34,10 @@ cd GeneriKit
 make <modules> modules && sudo make install clean
 ```
 Note: Where `<modules>`, put the drivers you want to compile.
+
+|   Modules             |   Description                       |
+|-----------------------|-------------------------------------|
+|   generikit-hid-sony  |   Generic PS3 Controller support.   |
 
 ## Inspiration
 
