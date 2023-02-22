@@ -34,11 +34,11 @@ Building for now is very dirty. But, hey, **if it works, it works!**:
 ```sh
 git clone --recursive https://github.com/KanuX-14/GeneriKit.git
 cd GeneriKit
-make <modules> modules && sudo make install clean
+make <driver> modules && sudo make install clean
 ```
-Note: Where `<modules>`, put the drivers you want to compile.
+Note: Where `<driver>`, put the drivers you want to compile.
 
-|   Modules             |   Description                       |
+|   Driver              |   Description                       |
 |-----------------------|-------------------------------------|
 |   generikit-hid-sony  |   Generic PS3 Controller support.   |
 
