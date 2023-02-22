@@ -23,7 +23,6 @@ But this day is most likely to happen very far from now. So, consider having the
 |   gcc         |   https://ftp.gnu.org/gnu/gcc/                    |
 |   git         |   https://ftp.gnu.org/gnu/git/                    |
 |   make        |   https://ftp.gnu.org/gnu/make/                   |
-|   wget        |   https://ftp.gnu.org/gnu/wget/                   |
 
 It is necessary the usage of kernel headers. Each distribution have a different package.<br>
 They can also be manually compiled. See [this](https://www.kernel.org/doc/html/latest/kbuild/modules.html).
