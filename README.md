@@ -1,5 +1,9 @@
 <p align="center">
-<img src="./.media/generikit_logo.png" alt="GeneriKit logo" width="50%"/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.media/language/english/generikit_wide_dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./.media/language/english/generikit_wide_light.png">
+  <img alt="GeneriKit" src="./.media/language/english/generikit_wide_dark.png" width="55%">
+</picture>
 </p>
 
 Generic patches. Those that were revoked by the sages.
