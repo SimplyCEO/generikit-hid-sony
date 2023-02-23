@@ -236,9 +236,6 @@
 #define USB_VENDOR_ID_BAANTO		0x2453
 #define USB_DEVICE_ID_BAANTO_MT_190W2	0x0100
 
-#define USB_VENDOR_ID_BATOH         0x054c // The device use the same parameters as original Sony controller
-#define USB_DEVICE_ID_BATOH_GAMEPAD 0x0268
-
 #define USB_VENDOR_ID_BELKIN		0x050d
 #define USB_DEVICE_ID_FLIP_KVM		0x3201
 
@@ -1399,5 +1396,13 @@
 
 #define USB_VENDOR_ID_SIGNOTEC			0x2133
 #define USB_DEVICE_ID_SIGNOTEC_VIEWSONIC_PD1011	0x0018
+
+/*
+    Generic drivers
+         ONLY
+*/
+
+#define USB_VENDOR_ID_BATOH         0x054c
+#define USB_DEVICE_ID_BATOH_GAMEPAD 0x0268
 
 #endif
