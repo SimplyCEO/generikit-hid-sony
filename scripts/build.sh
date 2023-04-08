@@ -24,19 +24,7 @@ function error()
 }
 
 # Support for generic PS3 Controller
-function custom_hid_sony()
-{
-	echo TODO
-}
-
-# Enable monitor mode for TL-WN722N v2/3
-function custom_8188eu()
-{
-	echo TODO
-}
-
-# Use a phone / Google Cardboard VR as a SteamVR
-function custom_openvr()
+function generikit_hid_sony()
 {
 	echo TODO
 }
@@ -56,7 +44,7 @@ if [ -d /lib/modules/$(uname -r)/build ]; then
 		elif type yum &>/dev/null; then # THIS ONE I AM NOT SURE
 			sudo yum -y install gcc make wget
 		elif type dnf &>/dev/null; then # NEITHER THIS ONE
-				sudo dnf install gcc make wget -y
+			sudo dnf install gcc make wget -y
 		else
 			printf "$YELLOW""Warning! Your package manager were not found. Skipping...""$RESET_COLOUR""\n"
 		fi

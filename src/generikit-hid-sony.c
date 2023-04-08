@@ -42,7 +42,7 @@
 #include <linux/timer.h>
 #include <asm/unaligned.h>
 
-#include "generikit-hid-ids.h"
+#include "hid-ids.h"
 
 #define VAIO_RDESC_CONSTANT       BIT(0)
 #define SIXAXIS_CONTROLLER_USB    BIT(1)
@@ -1255,7 +1255,7 @@ static void nsg_mrxu_parse_report(struct sony_sc *sc, u8 *rd, int size)
 	 *   the touch-related data starts at offset 2.
 	 * For the first byte, bit 0 is set when touchpad button is pressed.
 	 * Bit 2 is set when a touch is active and the drag (Fn) key is pressed.
-	 * This drag key is mapped to BTN_LEFT.  It is operational only when a 
+	 * This drag key is mapped to BTN_LEFT.  It is operational only when a
 	 *   touch point is active.
 	 * Bit 4 is set when only the first touch point is active.
 	 * Bit 6 is set when only the second touch point is active.
@@ -1528,13 +1528,13 @@ static int sony_register_touchpad(struct sony_sc *sc, int touch_count,
 	input_set_abs_params(sc->touchpad, ABS_MT_POSITION_Y, 0, h, 0, 0);
 
 	if (touch_major > 0) {
-		input_set_abs_params(sc->touchpad, ABS_MT_TOUCH_MAJOR, 
+		input_set_abs_params(sc->touchpad, ABS_MT_TOUCH_MAJOR,
 			0, touch_major, 0, 0);
 		if (touch_minor > 0)
-			input_set_abs_params(sc->touchpad, ABS_MT_TOUCH_MINOR, 
+			input_set_abs_params(sc->touchpad, ABS_MT_TOUCH_MINOR,
 				0, touch_minor, 0, 0);
 		if (orientation > 0)
-			input_set_abs_params(sc->touchpad, ABS_MT_ORIENTATION, 
+			input_set_abs_params(sc->touchpad, ABS_MT_ORIENTATION,
 				0, orientation, 0, 0);
 	}
 
@@ -1642,7 +1642,7 @@ static int sixaxis_set_operational_usb(struct hid_device *hdev)
 	buf = kmalloc(buf_size, GFP_KERNEL);
 	if (!buf)
 		return -ENOMEM;
-	
+
 	if(sc->quirks & BATOH_DEVICE_CONTROLLER)
 	{
 		ret = 0;
@@ -1651,7 +1651,7 @@ static int sixaxis_set_operational_usb(struct hid_device *hdev)
 
 	ret = hid_hw_raw_request(hdev, 0xf2, buf, SIXAXIS_REPORT_0xF2_SIZE,
 			  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
-	
+
 	if (ret < 0) {
 		hid_err(hdev, "can't set operational mode: step 1\n");
 		goto out;
@@ -1661,10 +1661,10 @@ static int sixaxis_set_operational_usb(struct hid_device *hdev)
 	 * Some compatible controllers like the Speedlink Strike FX and
 	 * Gasia need another query plus an USB interrupt to get operational.
 	 */
-	
+
 	ret = hid_hw_raw_request(hdev, 0xf5, buf, SIXAXIS_REPORT_0xF5_SIZE,
 			  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
-	
+
 	if (ret < 0) {
 		hid_err(hdev, "can't set operational mode: step 2\n");
 		goto out;
@@ -3004,7 +3004,7 @@ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	if (!strcmp(hdev->name, "SHANWAN PS3 GamePad") ||
 	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
 		quirks |= SHANWAN_GAMEPAD;
-	
+
 	if (!strcmp(hdev->name, "PS3 Controller"))
 		quirks |= BATOH_DEVICE_CONTROLLER;
 

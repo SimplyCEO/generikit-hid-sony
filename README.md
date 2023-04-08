@@ -6,7 +6,7 @@
 </picture>
 </p>
 
-Generic patches. Those that were revoked by the sages.
+Generic PlayStation patches. Those that were revoked by the sages.
 
 ## Usage
 
@@ -15,7 +15,7 @@ But choosing which file to compile is a hard task. And that is what this reposit
 
 ## Dependencies
 
-In the middle of the repository jouney, most of the systems will have a automated install.<br>
+In the middle of the repository journey, most of the systems will have a automated install.<br>
 But this day is most likely to happen very far from now. So, consider having the following:
 
 |   Package     |   URL                                             |
@@ -32,15 +32,11 @@ They can also be manually compiled. See [this](https://www.kernel.org/doc/html/l
 Building for now is very dirty. But, hey, **if it works, it works!**:
 
 ```sh
-git clone --recursive https://github.com/KanuX-14/GeneriKit.git
-cd GeneriKit
-make <driver> modules && su -c "make install clean"
+git clone --recursive https://github.com/KanuX-14/generikit-hid-sony.git
+cd generikit-hid-sony
+make && su -c "make install clean"
 ```
-Note: Where `<driver>`, put the drivers you want to compile.
 
-|   Driver              |   Description                       |
-|-----------------------|-------------------------------------|
-|   generikit-hid-sony  |   Generic PS3 Controller support.   |
 
 ## Inspiration
 
@@ -52,7 +48,7 @@ Even knowing it is generic, the device continue being a device.
 
 ## Contribution
 
-You are more than welcome to submit a driver that got revoked by the team.<br>
+You are more than welcome to submit a fix that got revoked by the team.<br>
 If your driver bugs some architecture, consider putting a `warning.txt` file within the directory.
 
 All the contribution should be directly sent to the `devel` branch.
