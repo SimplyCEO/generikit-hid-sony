@@ -64,7 +64,7 @@
 #define GH_GUITAR_CONTROLLER      BIT(17)
 #define GHL_GUITAR_PS3WIIU        BIT(18)
 #define GHL_GUITAR_PS4            BIT(19)
-#define BATOH_DEVICE_CONTROLLER	  BIT(20)
+#define GENERIC_GAMEPAD						BIT(20)
 
 #define SIXAXIS_CONTROLLER (SIXAXIS_CONTROLLER_USB | SIXAXIS_CONTROLLER_BT)
 #define MOTION_CONTROLLER (MOTION_CONTROLLER_USB | MOTION_CONTROLLER_BT)
@@ -1643,7 +1643,7 @@ static int sixaxis_set_operational_usb(struct hid_device *hdev)
 	if (!buf)
 		return -ENOMEM;
 
-	if(sc->quirks & BATOH_DEVICE_CONTROLLER)
+	if(sc->quirks & GENERIC_GAMEPAD)
 	{
 		ret = 0;
 		goto out;
@@ -2273,8 +2273,6 @@ static void sixaxis_send_output_report(struct sony_sc *sc)
 		}
 	}
 
-	/* SHANWAN controllers require output reports via intr channel */
-	if (sc->quirks & SHANWAN_GAMEPAD)
 		hid_hw_output_report(sc->hdev, (u8 *)report,
 				sizeof(struct sixaxis_output_report));
 	else
@@ -2661,7 +2659,7 @@ static int sony_check_add(struct sony_sc *sc)
 				SIXAXIS_REPORT_0xF2_SIZE, HID_FEATURE_REPORT,
 				HID_REQ_GET_REPORT);
 
-		if(sc->quirks & BATOH_DEVICE_CONTROLLER)
+		if(sc->quirks & GENERIC_GAMEPAD)
 			ret = 17;
 
 		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
@@ -3006,7 +3004,7 @@ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
 		quirks |= SHANWAN_GAMEPAD;
 
 	if (!strcmp(hdev->name, "PS3 Controller"))
-		quirks |= BATOH_DEVICE_CONTROLLER;
+		quirks |= GENERIC_GAMEPAD;
 
 	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
 	if (sc == NULL) {
@@ -3229,9 +3227,9 @@ static const struct hid_device_id sony_devices[] = {
 	/* Guitar Hero Live PS4 guitar dongles */
 	{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE),
 		.driver_data = GHL_GUITAR_PS4 | GH_GUITAR_CONTROLLER },
-	/* Batoh Device Controller for PS3 */
-	{ HID_USB_DEVICE(USB_VENDOR_ID_BATOH, USB_DEVICE_ID_BATOH_GAMEPAD),
-		.driver_data = SIXAXIS_CONTROLLER_USB | BATOH_DEVICE_CONTROLLER },
+	/* Generic Device Controller for PS3 */
+	{ HID_USB_DEVICE(USB_VENDOR_ID_GENERIC, USB_DEVICE_ID_GENERIC_GAMEPAD),
+		.driver_data = SIXAXIS_CONTROLLER_USB | GENERIC_GAMEPAD },
 	{ }
 };
 MODULE_DEVICE_TABLE(hid, sony_devices);

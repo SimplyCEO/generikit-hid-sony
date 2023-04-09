@@ -1434,7 +1434,7 @@
          ONLY
 */
 
-#define USB_VENDOR_ID_BATOH         0x054c
-#define USB_DEVICE_ID_BATOH_GAMEPAD 0x0268
+#define USB_VENDOR_ID_GENERIC         0x054c
+#define USB_DEVICE_ID_GENERIC_GAMEPAD 0x0268
 
 #endif
