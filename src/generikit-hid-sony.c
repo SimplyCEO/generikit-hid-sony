@@ -2126,8 +2126,7 @@ static int sony_leds_init(struct sony_sc *sc)
 	char *name;
 	size_t name_len;
 	const char *name_fmt;
-	static const char * const ds4_name_str[] = { "red", "green", "blue",
-						  "global" };
+	static const char * const ds4_name_str[] = { "red", "green", "blue", "global" };
 	u8 max_brightness[MAX_LEDS] = { [0 ... (MAX_LEDS - 1)] = 1 };
 	u8 use_hw_blink[MAX_LEDS] = { 0 };
 
@@ -2273,6 +2272,8 @@ static void sixaxis_send_output_report(struct sony_sc *sc)
 		}
 	}
 
+	/* SHANWAN/GENERIC controllers require output reports via intr channel */
+	if (sc->quirks & SHANWAN_GAMEPAD || sc->quirks & GENERIC_GAMEPAD)
 		hid_hw_output_report(sc->hdev, (u8 *)report,
 				sizeof(struct sixaxis_output_report));
 	else
