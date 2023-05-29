@@ -2272,8 +2272,8 @@ static void sixaxis_send_output_report(struct sony_sc *sc)
 		}
 	}
 
-	/* SHANWAN/GENERIC controllers require output reports via intr channel */
-	if (sc->quirks & SHANWAN_GAMEPAD || sc->quirks & GENERIC_GAMEPAD)
+	/* SHANWAN controllers require output reports via intr channel */
+	if (sc->quirks & SHANWAN_GAMEPAD)
 		hid_hw_output_report(sc->hdev, (u8 *)report, sizeof(struct sixaxis_output_report));
 	else
 	{
