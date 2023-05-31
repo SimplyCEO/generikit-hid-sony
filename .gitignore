@@ -1,4 +1,15 @@
 # Build directory
 
-[B,b]uild/
-[B,b]uild-ms/
+/[B,b]uild/
+/[B,b]uild-ms/
+
+# Built files
+
+.*.cmd
+*.cmd
+*.ko
+*.mod
+*.mod.c
+*.o
+*.order
+*.symvers
