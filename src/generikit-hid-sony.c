@@ -42,7 +42,7 @@
 #include <linux/timer.h>
 #include <asm/unaligned.h>
 
-#include "hid-ids.h"
+#include "ids.h"
 
 #define VAIO_RDESC_CONSTANT       BIT(0)
 #define SIXAXIS_CONTROLLER_USB    BIT(1)
