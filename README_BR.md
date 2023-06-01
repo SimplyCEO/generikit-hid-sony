@@ -55,6 +55,7 @@ Só lembre de remover as aspas (") de todo comando contendo "su -c".
 <b>Clone o repositório</b>:
 ```sh
 git clone https://github.com/KanuX-14/generikit-hid-sony.git
+cd generikit-hid-sony/
 ```
 
 <b>Usando DKMS</b>:
@@ -64,7 +65,6 @@ su -c "sh dkms-install.sh"
 
 <b>Compilando manualmente</b>:
 ```sh
-cd generikit-hid-sony/
 make && su -c "make install clean"
 ```
 
