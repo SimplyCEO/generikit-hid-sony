@@ -38,6 +38,7 @@ Just remember that you need to remove the quote marks (") from every given "su -
 <b>Clone the repository</b>:
 ```sh
 git clone https://github.com/KanuX-14/generikit-hid-sony.git
+cd generikit-hid-sony/
 ```
 
 <b>Using DKMS</b>:
@@ -47,7 +48,6 @@ su -c "sh dkms-install.sh"
 
 <b>Manually compiling</b>:
 ```sh
-cd generikit-hid-sony/
 make && su -c "make install clean"
 ```
 
@@ -84,7 +84,7 @@ Contribution
 ------------
 
 You are more than welcome to submit a fix that got revoked by the team.<br>
-If your driver bugs some architecture, consider putting a `warning.txt` file within the directory.
+If your fix has bugs in some architecture, consider putting a description in the `warning.txt` file.
 
 All the contribution should be directly sent to the `devel` branch.
 ```sh
