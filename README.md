@@ -35,9 +35,18 @@ Compiling
 <b>Tip</b>: "su -c" can be your root manager, sudo, doas, or another...<br>
 Just remember that you need to remove the quote marks (") from every given "su -c" command.
 
-Clone the repository and compile:
+<b>Clone the repository</b>:
 ```sh
 git clone https://github.com/KanuX-14/generikit-hid-sony.git
+```
+
+<b>Using DKMS</b>:
+```sh
+su -c "sh dkms-install.sh"
+```
+
+<b>Manually compiling</b>:
+```sh
 cd generikit-hid-sony/
 make && su -c "make install clean"
 ```
@@ -53,6 +62,14 @@ su -c "modprobe -r generikit-hid-sony"
 su -c "modprobe hid-sony"
 ```
 To return the generikit driver, do the other way around.
+
+Removing
+--------
+
+<b>Using DKMS</b>:
+```sh
+su -c "sh dkms-remove.sh"
+```
 
 Inspiration
 -----------
