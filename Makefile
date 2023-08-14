@@ -8,10 +8,10 @@ BUILD_DIRECTORY := $(shell pwd)
 obj-m := src/generikit-hid-sony.o
 
 all:
-	make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules
+	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules
 
 install: # Run as root
-	make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules_install
+	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules_install
 
 clean:
 	@rm -v .*.cmd *.symvers *.order 2>/dev/null || true
