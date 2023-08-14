@@ -73,7 +73,7 @@ Remova o antigo driver para carregar o do generikit:
 printf "blacklist hid-sony\n" | su -c "tee /etc/modprobe.d/generikit.conf"
 ```
 
-Para carregar o driver original, desative `generikit-hid-sony` and carregue `hid-sony`:
+Para carregar o driver original, desative `generikit-hid-sony` e carregue `hid-sony`:
 ```sh
 su -c "modprobe -r generikit-hid-sony"
 su -c "modprobe hid-sony"
