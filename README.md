@@ -1,16 +1,16 @@
 <p align="center">
   <picture>
-    <a href="/README.md">
+    <a href="README.md">
       <img alt="English" src="https://openmoji.org/data/color/svg/1F1EC-1F1E7.svg" width=5%>
     </a>
   </picture>
   <picture>
-    <a href="/README_BR.md">
+    <a href="README_BR.md">
       <img alt="Portuguese" src="https://openmoji.org/data/color/svg/1F1E7-1F1F7.svg" width=5%>
     </a>
   </picture>
   <picture>
-    <a href="/README_ES.md">
+    <a href="README_ES.md">
       <img alt="Spanish" src="https://openmoji.org/data/color/svg/1F1EA-1F1F8.svg" width=5%>
     </a>
   </picture>
