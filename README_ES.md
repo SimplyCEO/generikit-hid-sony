@@ -46,6 +46,9 @@ Pero ese día todavía está muy lejos. Así que considere tener los siguientes 
 Se requiere el uso de los headers del kernel. Cada distribución tiene su propio paquete diferente.<br>
 También se pueden compilar manualmente. Vea [eso](https://www.kernel.org/doc/html/latest/kbuild/modules.html).
 
+Opcional: También se pueden usar otros compiladores de C, pero recuerde que su kernel DEBE
+ser compilado por el mismo compilador.
+
 Compilando
 ----------
 
@@ -54,7 +57,7 @@ Solo recuerde eliminar las comillas (") de cada comando que contenga "su -c".
 
 <b>Clona el repositorio</b>:
 ```sh
-git clone https://github.com/KanuX-14/generikit-hid-sony.git
+git clone https://github.com/SimplyCEO/generikit-hid-sony.git
 cd generikit-hid-sony/
 ```
 
@@ -75,7 +78,7 @@ printf "blacklist hid-sony\n" | su -c "tee /etc/modprobe.d/generikit.conf"
 
 Para cargar el driver original, desactive `generikit-hid-sony` y cargue `hid-sony`:
 ```sh
-su -c "modprobe -r generikit-hid-sony"
+su -c "modprobe --remove generikit-hid-sony"
 su -c "modprobe hid-sony"
 ```
 Para volver al driver de generikit, haz lo reverso de el indicado.
@@ -114,5 +117,5 @@ git checkout devel
 Referências
 ----------
 
-Mi primer [pull request cerrado](https://github.com/zen-kernel/zen-kernel/pull/279).<br>
+Mi primer [pull request cerrado](https://github.com/zen-kernel/zen-kernel/pull/279), un concepto del que nació el proyecto.<br>
 [Discusión en el foro](https://retropie.org.uk/forum/topic/28263/playstation-3-controller-not-connecting-wired-on-new-pi4-retropie-build/7) sobre el genérico controle de PS3... un grande salve para doug y [b3n](https://github.com/btlogy)!

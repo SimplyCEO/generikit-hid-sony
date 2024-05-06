@@ -46,6 +46,9 @@ But this day is most likely to happen very far from now. So, consider having the
 It is necessary the usage of kernel headers. Each distribution have a different package.<br>
 They can also be manually compiled. See [this](https://www.kernel.org/doc/html/latest/kbuild/modules.html).
 
+Optional: Other C compilers can be used too, but keep in mind that your kernel NEED to be compiled
+by the same provided compiler.
+
 Compiling
 ---------
 
@@ -54,7 +57,7 @@ Just remember that you need to remove the quote marks (") from every given "su -
 
 <b>Clone the repository</b>:
 ```sh
-git clone https://github.com/KanuX-14/generikit-hid-sony.git
+git clone https://github.com/SimplyCEO/generikit-hid-sony.git
 cd generikit-hid-sony/
 ```
 
@@ -75,7 +78,7 @@ printf "blacklist hid-sony\n" | su -c "tee /etc/modprobe.d/generikit.conf"
 
 To load the original driver, unload `generikit-hid-sony` and load `hid-sony`:
 ```sh
-su -c "modprobe -r generikit-hid-sony"
+su -c "modprobe --remove generikit-hid-sony"
 su -c "modprobe hid-sony"
 ```
 To return the generikit driver, do the other way around.
@@ -111,5 +114,5 @@ git checkout devel
 References
 ----------
 
-My first [closed pull request](https://github.com/zen-kernel/zen-kernel/pull/279).<br>
+My first [closed pull request](https://github.com/zen-kernel/zen-kernel/pull/279), a concept of what the project become.<br>
 PS3 generic controller [forum discussion](https://retropie.org.uk/forum/topic/28263/playstation-3-controller-not-connecting-wired-on-new-pi4-retropie-build/7)... huge thanks to doug and [b3n](https://github.com/btlogy)!
