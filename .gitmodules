@@ -1,3 +1,0 @@
-[submodule "vendor/bluez"]
-	path = vendor/bluez
-	url = https://github.com/KanuX-14/bluez.git
