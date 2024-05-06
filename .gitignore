@@ -13,3 +13,7 @@
 *.o
 *.order
 *.symvers
+
+# Files to be patched
+
+hid-sony.c

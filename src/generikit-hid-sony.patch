@@ -1,0 +1,51 @@
+--- hid-sony.c	2024-05-05 21:38:05.562068414 -0300
++++ generikit-hid-sony.c	2024-05-05 21:37:31.758069738 -0300
+@@ -42,7 +42,7 @@
+ #include <linux/timer.h>
+ #include <asm/unaligned.h>
+ 
+-#include "hid-ids.h"
++#include "ids.h"
+ 
+ #define VAIO_RDESC_CONSTANT       BIT(0)
+ #define SIXAXIS_CONTROLLER_USB    BIT(1)
+@@ -61,6 +61,7 @@
+ #define GH_GUITAR_CONTROLLER      BIT(14)
+ #define GHL_GUITAR_PS3WIIU        BIT(15)
+ #define GHL_GUITAR_PS4            BIT(16)
++#define GENERIC_GAMEPAD           BIT(20)
+ 
+ #define SIXAXIS_CONTROLLER (SIXAXIS_CONTROLLER_USB | SIXAXIS_CONTROLLER_BT)
+ #define MOTION_CONTROLLER (MOTION_CONTROLLER_USB | MOTION_CONTROLLER_BT)
+@@ -1807,6 +1808,10 @@
+ 				SIXAXIS_REPORT_0xF2_SIZE, HID_FEATURE_REPORT,
+ 				HID_REQ_GET_REPORT);
+ 
++    /* Dirty assignment to skip generic device report. */
++    if (sc->quirks & GENERIC_GAMEPAD)
++    { ret = 17; }
++
+ 		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
+ 			hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
+ 			ret = ret < 0 ? ret : -EINVAL;
+@@ -2070,6 +2075,10 @@
+ 	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
+ 		quirks |= SHANWAN_GAMEPAD;
+ 
++  /* Filter it as generic so the patch avoid assigning wrong values to original devices. */
++  if (!strcmp(hdev->name, "PS3 Controller"))
++  { quirks |= GENERIC_GAMEPAD; }
++
+ 	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
+ 	if (sc == NULL) {
+ 		hid_err(hdev, "can't alloc sony descriptor\n");
+@@ -2273,6 +2282,9 @@
+ 	/* Guitar Hero Live PS4 guitar dongles */
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE),
+ 		.driver_data = GHL_GUITAR_PS4 | GH_GUITAR_CONTROLLER },
++  /* Generic Device Joystick for PS3 */
++	{ HID_USB_DEVICE(USB_VENDOR_ID_GENERIC, USB_DEVICE_ID_GENERIC_GAMEPAD),
++		.driver_data = SIXAXIS_CONTROLLER_USB | GENERIC_GAMEPAD },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(hid, sony_devices);
