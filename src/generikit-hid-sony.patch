@@ -1,5 +1,5 @@
---- hid-sony.c	2024-05-06 10:51:29.174941803 -0300
-+++ generikit-hid-sony.c	2024-05-06 10:50:08.628944958 -0300
+--- hid-sony.c.orig	2024-07-22 18:33:34.367720496 -0300
++++ hid-sony.c	2024-07-22 18:38:25.601040926 -0300
 @@ -42,7 +42,7 @@
  #include <linux/timer.h>
  #include <asm/unaligned.h>
@@ -21,12 +21,12 @@
  	if (!buf)
  		return -ENOMEM;
  
-+  /*
-+   * Generally a generic gamepad controller reports goes
-+   * beyond the desired limit. Skipping will make it work.
-+   */
-+  if (sc->quirks & GENERIC_GAMEPAD)
-+  { goto out; }
++	/*
++	 * Generally a generic gamepad controller reports goes
++	 * beyond the desired limit. Skipping will make it work.
++	 */
++	if (sc->quirks & GENERIC_GAMEPAD)
++	{ goto out; }
 +
  	ret = hid_hw_raw_request(hdev, 0xf2, buf, SIXAXIS_REPORT_0xF2_SIZE,
  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
@@ -35,29 +35,56 @@
  				SIXAXIS_REPORT_0xF2_SIZE, HID_FEATURE_REPORT,
  				HID_REQ_GET_REPORT);
  
-+    /* Dirty assignment to skip generic device report. */
-+    if (sc->quirks & GENERIC_GAMEPAD)
-+    { ret = 17; }
++		/* Dirty assignment to skip generic device report. */
++		if (sc->quirks & GENERIC_GAMEPAD)
++		{ ret = 17; }
 +
  		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
  			hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
  			ret = ret < 0 ? ret : -EINVAL;
-@@ -2070,6 +2082,10 @@
- 	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
- 		quirks |= SHANWAN_GAMEPAD;
+@@ -2054,18 +2066,31 @@
  
-+  /* Filter it as generic so the patch avoid assigning wrong values to original devices. */
-+  if (!strcmp(hdev->name, "PS3 Controller"))
-+  { quirks |= GENERIC_GAMEPAD; }
-+
+ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ {
+-	int ret;
++	int i = 0, ret = 0;
+ 	unsigned long quirks = id->driver_data;
+ 	struct sony_sc *sc;
+ 	struct usb_device *usbdev;
+ 	unsigned int connect_mask = HID_CONNECT_DEFAULT;
++	char buffer[4] = {0};
+ 
+-	if (!strcmp(hdev->name, "FutureMax Dance Mat"))
+-		quirks |= FUTUREMAX_DANCE_MAT;
++	/* Read first 4 characters of 'hdev->name' to buffer. */
++	for (i=0; i<4; i++)
++	{ buffer[i] = toupper(hdev->name[i]); }
++	buffer[i+1] = 0;
+ 
+-	if (!strcmp(hdev->name, "SHANWAN PS3 GamePad") ||
+-	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
+-		quirks |= SHANWAN_GAMEPAD;
++	/*
++	 * Filter out SONY controllers from being detected as some kind of generic device
++	 * avoiding assigning wrong values.
++	 */
++	if (strcmp(buffer, "SONY"))
++	{
++		if (!strcmp(hdev->name, "FutureMax Dance Mat"))
++		{ quirks |= FUTUREMAX_DANCE_MAT; }
++		else if (!strcmp(hdev->name, "SHANWAN PS3 GamePad") || !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
++		{ quirks |= SHANWAN_GAMEPAD; }
++		else
++		{ quirks |= GENERIC_GAMEPAD; }
++  }
+ 
  	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
  	if (sc == NULL) {
- 		hid_err(hdev, "can't alloc sony descriptor\n");
-@@ -2273,6 +2289,9 @@
+@@ -2270,6 +2295,9 @@
  	/* Guitar Hero Live PS4 guitar dongles */
  	{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE),
  		.driver_data = GHL_GUITAR_PS4 | GH_GUITAR_CONTROLLER },
-+  /* Generic Device Joystick for PS3 */
++	/* Generic Device Joystick for PS3 */
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_GENERIC, USB_DEVICE_ID_GENERIC_GAMEPAD),
 +		.driver_data = SIXAXIS_CONTROLLER_USB | GENERIC_GAMEPAD },
  	{ }
