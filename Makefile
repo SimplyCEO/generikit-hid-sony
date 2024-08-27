@@ -1,5 +1,7 @@
 # Initial variables
 
+CONFIG_MODULE_SIG=n
+
 HID_SONY_MAINSTREAM = https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/hid/hid-sony.c
 HID_SONY_PATCH      = src/generikit-hid-sony.patch
 
