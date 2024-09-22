@@ -1,7 +1,10 @@
---- hid-sony.c	2024-08-27 13:25:27.652280310 -0300
-+++ generikit-hid-sony.c	2024-08-27 13:27:48.012274749 -0300
-@@ -42,7 +42,7 @@
+--- src/hid-sony.c	2024-09-22 09:36:29.701676912 -0300
++++ src/generikit-hid-sony.c	2024-09-22 09:36:19.915010186 -0300
+@@ -40,9 +40,10 @@
+ #include <linux/crc32.h>
+ #include <linux/usb.h>
  #include <linux/timer.h>
++#include <linux/version.h>
  #include <asm/unaligned.h>
  
 -#include "hid-ids.h"
@@ -9,7 +12,7 @@
  
  #define VAIO_RDESC_CONSTANT       BIT(0)
  #define SIXAXIS_CONTROLLER_USB    BIT(1)
-@@ -61,6 +61,7 @@
+@@ -61,6 +62,7 @@
  #define GH_GUITAR_CONTROLLER      BIT(14)
  #define GHL_GUITAR_PS3WIIU        BIT(15)
  #define GHL_GUITAR_PS4            BIT(16)
@@ -17,7 +20,76 @@
  
  #define SIXAXIS_CONTROLLER (SIXAXIS_CONTROLLER_USB | SIXAXIS_CONTROLLER_BT)
  #define MOTION_CONTROLLER (MOTION_CONTROLLER_USB | MOTION_CONTROLLER_BT)
-@@ -1142,6 +1143,13 @@
+@@ -99,7 +101,12 @@
+ };
+ 
+ /* PS/3 Motion controller */
+-static const u8 motion_rdesc[] = {
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,12,0))
++static const
++#else
++static
++#endif
++u8 motion_rdesc[] = {
+ 	0x05, 0x01,         /*  Usage Page (Desktop),               */
+ 	0x09, 0x04,         /*  Usage (Joystick),                   */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+@@ -195,7 +202,12 @@
+ 	0xC0                /*  End Collection                      */
+ };
+ 
+-static const u8 ps3remote_rdesc[] = {
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,12,0))
++static const
++#else
++static
++#endif
++u8 ps3remote_rdesc[] = {
+ 	0x05, 0x01,          /* GUsagePage Generic Desktop */
+ 	0x09, 0x05,          /* LUsage 0x05 [Game Pad] */
+ 	0xA1, 0x01,          /* MCollection Application (mouse, keyboard) */
+@@ -599,14 +611,24 @@
+ 	return 0;
+ }
+ 
+-static const u8 *motion_fixup(struct hid_device *hdev, u8 *rdesc,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,12,0))
++static const
++#else
++static
++#endif
++u8 *motion_fixup(struct hid_device *hdev, u8 *rdesc,
+ 			      unsigned int *rsize)
+ {
+ 	*rsize = sizeof(motion_rdesc);
+ 	return motion_rdesc;
+ }
+ 
+-static const u8 *ps3remote_fixup(struct hid_device *hdev, u8 *rdesc,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,12,0))
++static const
++#else
++static
++#endif
++u8 *ps3remote_fixup(struct hid_device *hdev, u8 *rdesc,
+ 				 unsigned int *rsize)
+ {
+ 	*rsize = sizeof(ps3remote_rdesc);
+@@ -743,7 +765,12 @@
+ 	return -1;
+ }
+ 
+-static const u8 *sony_report_fixup(struct hid_device *hdev, u8 *rdesc,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,12,0))
++static const
++#else
++static
++#endif
++u8 *sony_report_fixup(struct hid_device *hdev, u8 *rdesc,
+ 		unsigned int *rsize)
+ {
+ 	struct sony_sc *sc = hid_get_drvdata(hdev);
+@@ -1142,6 +1169,13 @@
  	if (!buf)
  		return -ENOMEM;
  
@@ -31,7 +103,7 @@
  	ret = hid_hw_raw_request(hdev, 0xf2, buf, SIXAXIS_REPORT_0xF2_SIZE,
  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
  	if (ret < 0) {
-@@ -1807,6 +1815,10 @@
+@@ -1807,6 +1841,10 @@
  				SIXAXIS_REPORT_0xF2_SIZE, HID_FEATURE_REPORT,
  				HID_REQ_GET_REPORT);
  
@@ -42,7 +114,7 @@
  		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
  			hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
  			ret = ret < 0 ? ret : -EINVAL;
-@@ -2054,18 +2066,38 @@
+@@ -2054,18 +2092,38 @@
  
  static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
  {
@@ -87,7 +159,7 @@
  
  	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
  	if (sc == NULL) {
-@@ -2270,6 +2302,9 @@
+@@ -2270,6 +2328,9 @@
  	/* Guitar Hero Live PS4 guitar dongles */
  	{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE),
  		.driver_data = GHL_GUITAR_PS4 | GH_GUITAR_CONTROLLER },
