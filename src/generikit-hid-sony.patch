@@ -1,5 +1,5 @@
---- src/hid-sony.c	2024-10-07 19:05:37.717806423 -0300
-+++ src/generikit-hid-sony.c	2024-10-07 19:03:06.037807644 -0300
+--- src/hid-sony.c	2024-10-07 19:24:20.074464057 -0300
++++ src/generikit-hid-sony.c	2024-10-07 19:20:36.494465858 -0300
 @@ -40,9 +40,14 @@
  #include <linux/crc32.h>
  #include <linux/usb.h>
@@ -119,7 +119,7 @@
  		if (ret != SIXAXIS_REPORT_0xF2_SIZE) {
  			hid_err(sc->hdev, "failed to retrieve feature report 0xf2 with the Sixaxis MAC address\n");
  			ret = ret < 0 ? ret : -EINVAL;
-@@ -2054,18 +2096,38 @@
+@@ -2054,18 +2096,34 @@
  
  static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
  {
@@ -138,12 +138,8 @@
 +	 */
 +	unsigned char i = 0;
 +	char hdev_name_buffer[5] = {0};
-+	strncpy(hdev_name_buffer, hdev->name, 4);
-+	hdev_name_buffer[4] = '\0';
 +	for (i=0; (i<4 && hdev->name[i]!='\0'); i++)
-+	{
-+		hdev_name_buffer[i] = toupper(hdev_name_buffer[i]);
-+	}
++	{ hdev_name_buffer[i] = hdev->name[i]-32; }
  
 -	if (!strcmp(hdev->name, "SHANWAN PS3 GamePad") ||
 -	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
@@ -164,7 +160,7 @@
  
  	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
  	if (sc == NULL) {
-@@ -2270,6 +2332,9 @@
+@@ -2270,6 +2328,9 @@
  	/* Guitar Hero Live PS4 guitar dongles */
  	{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE),
  		.driver_data = GHL_GUITAR_PS4 | GH_GUITAR_CONTROLLER },
