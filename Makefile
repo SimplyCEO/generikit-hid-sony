@@ -1,17 +1,29 @@
+# Essential variables definition
+
+# Defaults to: GCC (mostly used by kernels)
+ifndef CC
+	CC := gcc
+endif
+
+# Defaults to: DEBUG compiler values
+ifndef CFLAGS
+	CFLAGS := -g3 -ggdb -Wall
+endif
+
 # Initial variables
 
-CONFIG_MODULE_SIG=n
+CONFIG_MODULE_SIG   := n
 
-HID_SONY_MAINSTREAM = https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/hid/hid-sony.c
-HID_SONY_PATCH      = src/generikit-hid-sony.patch
+HID_SONY_MAINSTREAM := https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/hid/hid-sony.c
+HID_SONY_PATCH      := src/generikit-hid-sony.patch
 
 # Kernel variables
 
-KERNEL_VERSION  = $(shell uname -r)
-KERNEL_PATH     = /lib/modules/$(KERNEL_VERSION)
-KERNEL_BUILD    = $(KERNEL_PATH)/build
-BUILD_DIRECTORY = $(shell pwd)
-obj-m           = src/generikit-hid-sony.o
+KERNEL_VERSION  := $(shell uname -r)
+KERNEL_PATH     := /lib/modules/$(KERNEL_VERSION)
+KERNEL_BUILD    := $(KERNEL_PATH)/build
+BUILD_DIRECTORY := $(shell pwd)
+obj-m           := src/generikit-hid-sony.o
 
 patch:
 	curl -S $(HID_SONY_MAINSTREAM) --output src/hid-sony.c
@@ -20,10 +32,10 @@ patch:
 	@make compile
 
 compile:
-	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules
+	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) CFLAGS_MODULE="$(CFLAGS)" CC=$(CC) modules
 
 install: # Run as root
-	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules_install
+	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) CFLAGS_MODULE="$(CFLAGS)" CC=$(CC) modules_install
 	@mv src/generikit-hid-sony.c src/hid-sony.c
 
 clean:
