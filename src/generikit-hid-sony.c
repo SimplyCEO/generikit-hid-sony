@@ -2116,11 +2116,11 @@ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	 * Filter out SONY controllers from being detected as some kind of generic device
 	 * avoiding assigning wrong values.
 	 */
-	if (strncmp(hdev_name_buffer, "SONY", 4))
+	if (strncmp(hdev_name_buffer, "SONY", 4) != 0)
 	{
-		if (!strcmp(hdev->name, "FutureMax Dance Mat"))
+		if (strcmp(hdev->name, "FutureMax Dance Mat") == 0)
 		{ quirks |= FUTUREMAX_DANCE_MAT; }
-		else if ((!strcmp(hdev->name, "SHANWAN PS3 GamePad")) || (!strcmp(hdev->name, "ShanWan PS(R) Ga`epad")))
+		else if ((strcmp(hdev->name, "SHANWAN PS3 GamePad") == 0) || (strcmp(hdev->name, "ShanWan PS(R) Ga`epad") == 0))
 		{ quirks |= SHANWAN_GAMEPAD; }
 		else
 		{ quirks |= GENERIC_GAMEPAD; }
