@@ -14,8 +14,8 @@ endif
 
 CONFIG_MODULE_SIG   := n
 
-HID_SONY_MAINSTREAM := https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/hid/hid-sony.c
-HID_SONY_PATCH      := src/generikit-hid-sony.patch
+#HID_SONY_MAINSTREAM := https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/hid/hid-sony.c
+#HID_SONY_PATCH      := src/generikit-hid-sony.patch
 
 # Kernel variables
 
@@ -25,18 +25,18 @@ KERNEL_BUILD    := $(KERNEL_PATH)/build
 BUILD_DIRECTORY := $(shell pwd)
 obj-m           := src/generikit-hid-sony.o
 
-patch:
-	curl -S $(HID_SONY_MAINSTREAM) --output src/hid-sony.c
-	@patch src/hid-sony.c < $(HID_SONY_PATCH)
-	@mv src/hid-sony.c src/generikit-hid-sony.c
-	@make compile
+#patch:
+#	curl -S $(HID_SONY_MAINSTREAM) --output src/hid-sony.c
+#	@patch src/hid-sony.c < $(HID_SONY_PATCH)
+#	@mv src/hid-sony.c src/generikit-hid-sony.c
+#	@make compile
 
 compile:
 	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) CFLAGS_MODULE="$(CFLAGS)" CC=$(CC) modules
 
 install: # Run as root
 	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) CFLAGS_MODULE="$(CFLAGS)" CC=$(CC) modules_install
-	@mv src/generikit-hid-sony.c src/hid-sony.c
+#	@mv src/generikit-hid-sony.c src/hid-sony.c
 
 clean:
 	@rm -v .*.cmd *.symvers *.order 2>/dev/null || true
