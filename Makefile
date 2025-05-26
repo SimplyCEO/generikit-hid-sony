@@ -1,43 +1,46 @@
-# Get kernel path
+# Essential variables definition
 
-KERNEL_VERSION := $(shell uname -r)
-KERNEL_PATH := /lib/modules/$(KERNEL_VERSION)
-KERNEL_BUILD := $(KERNEL_PATH)/build
-BUILD_DIRECTORY := $(shell pwd)/build
-EXTRA := #skip
+# Defaults to: GCC (mostly used by kernels)
+ifndef CC
+	CC := gcc
+endif
 
-# Set the drivers and modules variable
-#
-# DO NOT define any optional file in the variables
+# Defaults to: DEBUG compiler values
+ifndef CFLAGS
+	CFLAGS := -g3 -ggdb -Wall
+endif
 
-DRIVERS =
-OBJECTS =
-OLD_MODULES =
-NEW_MODULES =
+# Initial variables
 
-all:
-	@printf "Choose the module(s) to compile\n\
-	\thid-sony - Support for generic PlayStation 3 controller.\n"
+CONFIG_MODULE_SIG   := n
 
-hid-sony:
-	@printf "\e[1;32mAdded hid-sony to the recipe.\e[0m\n"
-	@mkdir -pv $(BUILD_DIRECTORY)
-	@cp -v drivers/hid/generikit-hid-sony.c drivers/hid/generikit-hid-ids.h $(BUILD_DIRECTORY)
-	@printf "obj-m = generikit-hid-sony.o\n" > $(BUILD_DIRECTORY)/Makefile
-	@printf "hid-sony\n" >> $(BUILD_DIRECTORY)/old_modules
-	@printf "generikit-hid-sony\n" >> $(BUILD_DIRECTORY)/new_modules
+#HID_SONY_MAINSTREAM := https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/hid/hid-sony.c
+#HID_SONY_PATCH      := src/generikit-hid-sony.patch
 
-modules:
-	@mkdir -pv $(BUILD_DIRECTORY)
-	@cd $(BUILD_DIRECTORY) && make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules
+# Kernel variables
 
-install:
-	@for x in $(shell cat $(BUILD_DIRECTORY)/old_modules | wc -l); do rmmod $(shell cat $(BUILD_DIRECTORY)/old_modules | sed -n $(x)p) || true; done
-	@for x in $(shell cat $(BUILD_DIRECTORY)/new_modules | wc -l); do rmmod $(shell cat $(BUILD_DIRECTORY)/new_modules | sed -n $(x)p) || true; done
-	@for x in $(shell cat $(BUILD_DIRECTORY)/old_modules | wc -l); do printf "blacklist $(shell cat $(BUILD_DIRECTORY)/old_modules | sed -n $(x)p)\n" | tee /etc/modprobe.d/generikit.conf || true; done
-	@cd $(BUILD_DIRECTORY) && make -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) modules_install
-	@sleep 1
-	@for x in $(shell cat $(BUILD_DIRECTORY)/new_modules | wc -l); do modprobe -v $(shell cat $(BUILD_DIRECTORY)/new_modules | sed -n $(x)p) || true; done
+MODULE_NAME     := generikit-hid-sony
+KERNEL_VERSION  := $(shell uname -r)
+KERNEL_PATH     := /lib/modules/$(KERNEL_VERSION)
+KERNEL_BUILD    := $(KERNEL_PATH)/build
+BUILD_DIRECTORY := $(shell pwd)
+obj-m           := src/$(MODULE_NAME).o
+
+#patch:
+#	curl -S $(HID_SONY_MAINSTREAM) --output src/hid-sony.c
+#	@patch src/hid-sony.c < $(HID_SONY_PATCH)
+#	@mv src/hid-sony.c src/generikit-hid-sony.c
+#	@make compile
+
+compile:
+	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) CFLAGS_MODULE="$(CFLAGS)" CC=$(CC) modules
+	@cp src/$(MODULE_NAME).ko .
+
+install: # Run as root
+	$(MAKE) -C $(KERNEL_BUILD) M=$(BUILD_DIRECTORY) CFLAGS_MODULE="$(CFLAGS)" CC=$(CC) modules_install
+#	@mv src/generikit-hid-sony.c src/hid-sony.c
 
 clean:
-	@rm -rfv $(BUILD_DIRECTORY)
+	@rm -v *.ko 2>/dev/null || true
+	@rm -v .*.cmd *.symvers *.order 2>/dev/null || true
+	@rm -v src/.*.cmd src/*.o src/*.ko src/*.cmd src/*.mod src/*.mod.c 2>/dev/null || true

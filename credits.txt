@@ -1,0 +1,2 @@
+doug - generikit-hid-sony
+b3n - generikit-hid-sony
