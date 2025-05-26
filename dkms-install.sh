@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $EUID -ne 0 ]; then
+if [ ${EUID} -ne 0 ]; then
   printf "You must run this with root privileges.\n" 2>&1
   exit 1
 else
