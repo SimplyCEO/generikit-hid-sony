@@ -14,6 +14,7 @@
  *  Copyright (c) 2020-2021 Pascal Giard <pascal.giard@etsmtl.ca>
  *  Copyright (c) 2020 Sanjay Govind <sanjay.govind9@gmail.com>
  *  Copyright (c) 2021 Daniel Nguyen <daniel.nguyen.1@ens.etsmtl.ca>
+ *  Copyright (c) 2022-2025 João Simplício <simplyceo.developer@gmail.com>
  */
 
 /*
